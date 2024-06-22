@@ -29,23 +29,23 @@ export default async function handler(
       return res.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    if (reciever?.role !== 'TRAINER') {
-      return res.status(403).json({ error: 'Trainer email does not exists.' });
-    }
+    // if (reciever?.role !== 'TRAINER') {
+    //   return res.status(403).json({ error: 'Trainer email does not exists.' });
+    // }
 
-    if (currentUser?.role === 'USER') {
+    // if (currentUser?.role === 'USER') {
 
-      // Check if the user has already initiated a conversation
-      const existingConversation = await db.conversation.findFirst({
-        where: {
-          participant1Id: currentUser.id,
-        },
-      });
+    //   // Check if the user has already initiated a conversation
+    //   const existingConversation = await db.conversation.findFirst({
+    //     where: {
+    //       participant1Id: currentUser.id,
+    //     },
+    //   });
 
-      if (existingConversation) {
-        return res.status(403).json({ error: 'You can only connect with one trainer at a time.' });
-      }
-    }
+    //   if (existingConversation) {
+    //     return res.status(403).json({ error: 'You can only connect with one trainer at a time.' });
+    //   }
+    // }
 
     // Validate required fields
     if (!to || !text) {
