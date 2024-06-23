@@ -103,6 +103,7 @@ export default function Chat({ id }: ChatParams) {
           text: sendMessage,
           subject: "new message",
           session: session,
+          conversationID : id
         }),
       };
 
@@ -111,7 +112,6 @@ export default function Chat({ id }: ChatParams) {
       if (!response.ok) {
         throw new Error('Failed to send message');
       }
-      toast.success("Message Sent successfully!")
       setSendMessage('');
     } catch (error) {
       console.log('Error sending message:', error);
@@ -163,7 +163,7 @@ export default function Chat({ id }: ChatParams) {
               >
                 <p className="text-sm">{message.message}</p>
                 <div
-                  className={`text-xs ${
+                  className={`text-[9px] ${
                     isSentByCurrentUser ? "text-gray-700" : "text-gray-500 dark:text-gray-400"
                   } mt-1`}
                 >

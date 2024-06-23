@@ -9,10 +9,13 @@ import { auth } from "@/core/auth/auth";
 import { db } from "@/core/client/client";
 import HeaderBar from "../_blocks/header-bar";
 import BreadCrumbs from "@/components/common/breadcrumbs";
-import {checkSocket} from "./Try";
+import { redirect } from "next/navigation";
 
 const Layout = async ({ children }: { children: React.ReactNode }) => {
   const session = await auth();
+  if(!session){
+    return redirect("/auth")
+  }
   const userData = await db.user.findFirst({
     where: {
       email: session?.user?.email as string,

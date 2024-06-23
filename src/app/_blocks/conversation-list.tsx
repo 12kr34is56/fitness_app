@@ -27,7 +27,7 @@ const Conversations = () => {
     return <div className="dark:text-white text-slate-600 mt-10 h-max w-full p-4 border">Loading conversations...</div>;
   }
   if (conversations.length === 0) {
-    return <div className="text-white mt-10 h-max w-full p-4 border"> No Conversations</div>;
+    return <div className="dark:text-white text-slate-700 mt-10 h-max w-full p-4 border"> No Conversations</div>;
   }
 
   const formatDate = (dateString: string) => {

@@ -17,29 +17,21 @@ import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
 import { Input } from "@/components/ui/input";
 import { Loader } from "lucide-react";
-import { CreateNewMessageAction } from "@/core/actions/create-new-message-action";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { auth } from "@/core/auth/auth";
-import { Session } from "next-auth";
-import { NextApiResponseServerIo } from "@/resource/types/types";
 import { getSession } from "next-auth/react";
+import { Session } from "next-auth";
 
 const FormSchema = z.object({
   subject: z.string(),
   text: z.string(),
-  to: z.string(),
+  to: z.string().email("Please enter a valid email"),
 });
-
-type dataSchema = {
-  error : undefined | string,
-  success : null | boolean,
-}
 
 export default function CreateNewMessage() {
   const [isPending, setIsPending] = useState<boolean>(false);
   const router = useRouter();
-  const [session, setSession ] = useState<Session | null>(null)
+  const [session, setSession] = useState<Session | null>(null);
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
@@ -48,19 +40,18 @@ export default function CreateNewMessage() {
       to: "",
     },
   });
+
   useEffect(() => {
-    // Fetch session information asynchronously
     const fetchSession = async () => {
       try {
-        const sessionData = await getSession(); // Assuming auth() fetches session data
-        setSession(sessionData); // Update session state with fetched data
+        const sessionData = await getSession();
+        setSession(sessionData);
       } catch (error) {
         console.error("Error fetching session:", error);
-        // Handle error if needed
       }
     };
 
-    fetchSession(); // Call fetchSession on component mount
+    fetchSession();
   }, []);
 
   async function onSubmit(values: z.infer<typeof FormSchema>) {
@@ -68,29 +59,33 @@ export default function CreateNewMessage() {
       setIsPending(true);
       const payload = {
         ...values,
-        session,
       };
 
-      const config = {
+      const response = await fetch('/api/mess/create', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(payload),
-      };
-      const data:NextApiResponseServerIo = await fetch('/api/socket/messages', config);
-      if (data?.error) {
-        toast.error(data?.error);
+      });
+
+      const data: { error?: string; success?: string } = await response.json();
+
+      if (data.error) {
+        toast.error(data.error);
         setIsPending(false);
         form.reset();
+        return;
       }
-      if (data?.success) {
-        toast.success(data?.success);
+
+      if (data.success) {
+        toast.success(data.success);
         setIsPending(false);
-         setTimeout(() => {
-            router.push("/messages");
+        setTimeout(() => {
+          router.push("/messages");
         }, 3000);
         form.reset();
+        return;
       }
     } catch (error: any) {
       toast.error(error.message);
@@ -120,7 +115,6 @@ export default function CreateNewMessage() {
               <FormControl>
                 <Input type="email" placeholder="John@example.com" {...field} />
               </FormControl>
-
               <FormMessage />
             </FormItem>
           )}
@@ -134,7 +128,6 @@ export default function CreateNewMessage() {
               <FormControl>
                 <Input placeholder="What's This Email is About?" {...field} />
               </FormControl>
-
               <FormMessage />
             </FormItem>
           )}
