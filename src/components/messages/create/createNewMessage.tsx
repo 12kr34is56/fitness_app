@@ -69,7 +69,7 @@ export default function CreateNewMessage() {
         body: JSON.stringify(payload),
       });
 
-      const data: { error?: string; success?: string } = await response.json();
+      const data: { error?: string; success?: string; feedback?: string } = await response.json();
 
       if (data.error) {
         toast.error(data.error);
@@ -79,12 +79,10 @@ export default function CreateNewMessage() {
       }
 
       if (data.success) {
-        toast.success(data.success);
+        toast.success(data?.feedback);
         setIsPending(false);
-        setTimeout(() => {
-          router.push("/messages");
-        }, 3000);
         form.reset();
+        router.push("/messages");
         return;
       }
     } catch (error: any) {

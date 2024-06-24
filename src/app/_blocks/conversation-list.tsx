@@ -1,6 +1,7 @@
 'use client'
 
 import { useConversation } from "@/core/providers/conversation-provider";
+import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { toast } from 'sonner';
@@ -101,10 +102,12 @@ const Conversations = () => {
       <div>
         {conversations.map((convo) => (
           <Link href={`/messages/${convo.id}`} prefetch={false} key={convo.id} className="flex hover:cursor-pointer odd:bg-gray-100 even:border dark:odd:bg-gray-800 rounded-xl p-4 gap-2 w-full items-start">
-            <img 
+            <Image 
               src={convo?.participant?.image}
               alt="User Image"
               className="size-10 rounded-full bg-cover"
+              height={100}
+              width={100}
             />
             <div className="flex flex-col w-full text-sm text-slate-500">
               <div className="flex justify-between max-sm:justify-start gap-4">

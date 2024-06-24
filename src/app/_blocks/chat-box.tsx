@@ -28,11 +28,7 @@ type ChatParams = {
 
 export default function Chat({ id }: ChatParams) {
 
-  if(id === null || id === undefined){
-    return <div>
-      Invalid conversation
-    </div>
-  }
+  
   const [messages, setMessages] = useState<Message[]>([]);
   const [page, setPage] = useState<number>(0);
   const [sendMessage, setSendMessage] = useState<string>('');
@@ -40,6 +36,7 @@ export default function Chat({ id }: ChatParams) {
   const [loading, setLoading] = useState<boolean> (false);
   const { socket } = useSocket();
   const chatRef = useRef<HTMLDivElement | null>(null)
+  
   useEffect(() => {
     const fetchSession = async () => {
       const sessionData = await getSession();
@@ -86,6 +83,12 @@ export default function Chat({ id }: ChatParams) {
   useEffect(() => {
     chatRef?.current?.lastElementChild?.scrollIntoView({ behavior: 'smooth' });
   }, [messages])
+
+  if(id === null || id === undefined){
+    return <div>
+      Invalid conversation
+    </div>
+  }
 
   const handleSendMessage = async () => {
     try {

@@ -125,7 +125,7 @@ const DashboardLayout = ({
             links={role === ROLE.ADMIN ? adminRoute : userRoute}
           />
           <div className={DashboardLayoutStyles.AVATAR_DIV}>
-            <UserAvatar />
+            <UserAvatar src={""} name={""} email={""} />
             <ModeToggle />
             <SignOutButton />
           </div>
@@ -144,7 +144,7 @@ const DashboardLayout = ({
               </div>
             </Link>
             <div className="flex flex-row items-center gap-2">
-              <UserAvatar />
+              <UserAvatar src={""} name={""} email={""} />
               <ModeToggle />
               <SignOutButton />
             </div>

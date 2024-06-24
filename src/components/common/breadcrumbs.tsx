@@ -17,7 +17,7 @@ const BreadCrumbs: React.FC = () => {
   const pathname = usePathname()
 
   // Split the pathname to get each part of the route
-  const pathParts = pathname.split('/').filter((part) => part !== '')
+  const pathParts = pathname ? pathname.split('/').filter((part) => part !== '') : []
 
   // Generate breadcrumbs dynamically based on the current route
   const breadcrumbs = pathParts.map((part, index) => {

@@ -80,7 +80,7 @@ export async function POST(req: NextRequest) {
       },
     });
 
-    return NextResponse.json({ conversation, message: newMessage }, { status: 200 });
+    return NextResponse.json({ conversation, message: newMessage, success:true, feedback:"Conversation created successfully" }, { status: 200 });
   } catch (error) {
     console.error("[CREATE_CONVERSATION_ERROR]", error);
     return NextResponse.json({ error: "Internal server error" }, { status: 500 });

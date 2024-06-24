@@ -1,3 +1,6 @@
+
+
+export const dynamic = "force-dynamic"
 import MeetingList from "@/app/_blocks/meeting-list";
 import { auth } from "@/core/auth/auth";
 import { db } from "@/core/client/client";

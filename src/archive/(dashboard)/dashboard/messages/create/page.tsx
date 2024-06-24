@@ -1,4 +1,4 @@
-import CreateMailLayout from "@/components/messages/create/create-layout";
+// import CreateMailLayout from "@/components/messages/create/create-layout";
 
-const Page = () => <CreateMailLayout />;
-export default Page;
+// const Page = () => <CreateMailLayout />;
+// export default Page;

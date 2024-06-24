@@ -5,6 +5,7 @@ import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar"
 import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from "@/components/ui/table"
 import { Calendar } from "@/components/ui/calendar"
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@/components/ui/card"
+import Image from "next/image"
 
 export default function Dashboard() {
   return (
@@ -24,7 +25,7 @@ export default function Dashboard() {
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Avatar className="h-9 w-9">
-                <img src="/placeholder.svg" alt="@shadcn" />
+                <Image src="/placeholder.svg" alt="@shadcn" />
                 <AvatarFallback>JP</AvatarFallback>
               </Avatar>
             </DropdownMenuTrigger>
