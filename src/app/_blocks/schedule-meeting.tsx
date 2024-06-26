@@ -1,12 +1,25 @@
-"use client";
-
-import * as z from "zod";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { auth } from "@/core/auth/auth";
+import { db } from "@/core/client/client";
 
-import ScheduleNewMeeting from "./schedule-new-meeting";
-import MeetingList from "./meeting-list";
 
-export default function ScheduleMeeting() {
+
+
+export default async function ScheduleMeeting() {
+
+  const session = await auth();
+  const user = await db.user.findUnique({
+    where: {
+      email: session?.user?.email!,
+    },
+  });
+
+  console.log(user?.role);
+
+  if (user?.role !== "ADMIN" && user?.role !== "TRAINER") {
+    return null;
+  }
+
   return (
     <section className="p-4">
       <Tabs defaultValue="account" className="w-full">
