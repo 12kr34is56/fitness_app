@@ -14,6 +14,7 @@ import { ModeToggle } from "./modeToggle";
 import SignOutButton from "../auth/signout-button";
 import { TooltipProvider } from "../ui/tooltip";
 import { Skeleton } from "@/components/ui/skeleton";
+import Link from "next/link";
 
 const UserAvatarStyles = {
   BUTTON: "relative h-8 w-8 rounded-full",
@@ -68,23 +69,28 @@ const UserAvatar: React.FC<UserAvatarProps> = ({ src, name, email }) => {
               </div>
             }
           >
-            <DropdownMenuLabel className={UserAvatarStyles.DROPDOWN_LABEL}>
-              <div className={UserAvatarStyles.P_DIV}>
-                <p className={UserAvatarStyles.P1}>{name}</p>
-                <p className={UserAvatarStyles.P2}>{email}</p>
-              </div>
+            <DropdownMenuLabel
+              className={UserAvatarStyles.DROPDOWN_LABEL}
+              asChild
+            >
+              <Link href="/account">
+                <div className={UserAvatarStyles.P_DIV}>
+                  <p className={UserAvatarStyles.P1}>{name}</p>
+                  <p className={UserAvatarStyles.P2}>{email}</p>
+                </div>
+              </Link>
             </DropdownMenuLabel>
           </Suspense>
           <DropdownMenuSeparator />
           <DropdownMenuItem>
             <ModeToggle />
             <span>Theme Switch</span>
-            <DropdownMenuShortcut>⇧⌘T</DropdownMenuShortcut>
+            {/* <DropdownMenuShortcut>⇧⌘T</DropdownMenuShortcut> */}
           </DropdownMenuItem>
           <DropdownMenuItem>
             <SignOutButton />
             <span>Log out</span>
-            <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
+            {/* <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut> */}
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>

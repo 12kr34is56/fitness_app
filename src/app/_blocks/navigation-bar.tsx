@@ -26,7 +26,7 @@ const navItems: NavItem[] = [
     href: "/home",
     label: "Dashboard",
     icon: LayoutDashboard,
-    roles: ["ADMIN", ],
+    roles: ["ADMIN"],
   },
   { href: "/users", label: "Users", icon: User2, roles: ["ADMIN"] },
   {
@@ -41,7 +41,12 @@ const navItems: NavItem[] = [
     icon: MessageSquareTextIcon,
     roles: ["USER", "ADMIN", "TRAINER"],
   },
-  { href: "/account", label: "Account", icon: User2, roles: ["USER", "TRAINER"] },
+  {
+    href: "/account",
+    label: "Account",
+    icon: User2,
+    roles: ["USER", "TRAINER"],
+  },
 
   // You can add more items and roles here
 ];
@@ -54,7 +59,7 @@ const NavigationBar: React.FC<NavigationBarProps> = ({ userRole }) => {
   const pathname = usePathname();
 
   return (
-    <nav className="flex gap-5 items-center justify-center    backdrop-blur   rounded-3xl p-2 w-full h-16 ">
+    <nav className="flex md:gap-5 items-center justify-between md:justify-center backdrop-blur rounded-3xl p-2 w-full h-16 ">
       {navItems
         .filter((item) => item.roles.includes(userRole)) // Filter items based on user role
         .map((item) => (

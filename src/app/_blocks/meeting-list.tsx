@@ -19,8 +19,8 @@ export default function MeetingList({ data, user }: { data: Schedule[], user:Use
           View and manage your upcoming meetings.
         </CardDescription>
       </CardHeader>
-      <CardContent className="max-h-[450px] p-2 overflow-y-auto">
-        <div className="grid gap-2 pb-20 capitalize  ">
+      <CardContent className="max-h-[450px] p-2 overflow-y-auto border-2">
+        <div className="grid gap-2 pb-20 capitalize ">
           {data?.map((meeting) => (
             <Card key={meeting?.id} className="bg-secondary">
               <CardHeader>
