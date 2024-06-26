@@ -14,7 +14,8 @@ import { Button } from "@/components/ui/button";
 import { RemoveMeeting } from "@/server/removeMeeting";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
-import { Schedule } from "@/resource/types/types";
+import { Schedule } from "@prisma/client";
+// import { Schedule } from "@/resource/types/types";
 
 export default function MeetingList({
   data,
@@ -51,7 +52,7 @@ export default function MeetingList({
       )}
       <CardContent className="p-2 overflow-y-auto">
         <div className="grid gap-2 pb-20 capitalize ">
-          {data?.map((meeting) => (
+          {data?.map((meeting: any) => (
             <Card key={meeting?.id} className="bg-secondary relative">
               {/* {
                 user?.role
