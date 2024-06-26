@@ -286,7 +286,7 @@ const ScheduleNewMeeting = ({ email }: { email: string }) => {
           <CardFooter>
             <Button disabled={isPending} type="submit" className="w-full">
               {isPending && <Loader className="mr-2 h-4 w-4 animate-spin" />}
-              {isPending ? "Sending..." : "Send Mail"}
+              {isPending ? "Creating..." : "Create Schedule"}
             </Button>
           </CardFooter>
         </Card>

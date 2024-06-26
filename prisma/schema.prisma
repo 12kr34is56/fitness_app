@@ -14,35 +14,36 @@ generator client {
 }
 
 model User {
-  id            String          @id @default(cuid())
-  name          String?
-  email         String          @unique
-  image         String?
-  accounts      Account[]
-  sessions      Session[]
-  role          ROLE            @default(USER)
+  id             String          @id @default(cuid())
+  name           String?
+  email          String          @unique
+  emailVerified  DateTime?
+  image          String?
+  accounts       Account[]
+  sessions       Session[]
+  role           ROLE            @default(USER)
   Authenticators Authenticator[]
 
-  createdAt DateTime   @default(now())
-  updatedAt DateTime   @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   conversations1 Conversation[] @relation("Participant1Conversations")
   conversations2 Conversation[] @relation("Participant2Conversations")
 
-  messages      Message[]
+  messages Message[]
 
-  Schedules     Schedule[]
+  Schedules Schedule[]
 }
 
 model Conversation {
-  id             String      @id @default(cuid())
-  createdAt      DateTime    @default(now())
-  lastMessageAt  DateTime    @default(now())
+  id             String    @id @default(cuid())
+  createdAt      DateTime  @default(now())
+  lastMessageAt  DateTime  @default(now())
   messages       Message[]
   participant1Id String
   participant2Id String
-  participant1   User        @relation("Participant1Conversations", fields: [participant1Id], references: [id], onDelete: Cascade)
-  participant2   User        @relation("Participant2Conversations", fields: [participant2Id], references: [id], onDelete: Cascade)
+  participant1   User      @relation("Participant1Conversations", fields: [participant1Id], references: [id], onDelete: Cascade)
+  participant2   User      @relation("Participant2Conversations", fields: [participant2Id], references: [id], onDelete: Cascade)
 
   @@unique([participant1Id, participant2Id])
 }
@@ -114,8 +115,8 @@ model Message {
   userId         String?
   conversationId String?
 
-  User           User?         @relation(fields: [userId], references: [id], onDelete: Cascade)
-  conversation   Conversation? @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  User         User?         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  conversation Conversation? @relation(fields: [conversationId], references: [id], onDelete: Cascade)
 }
 
 model Schedule {
@@ -129,6 +130,6 @@ model Schedule {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
-  User        User?     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId      String?
+  User   User?   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String?
 }
