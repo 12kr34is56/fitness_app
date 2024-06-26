@@ -145,7 +145,7 @@ const ScheduleNewMeeting = ({ email }: { email: string }) => {
               Select out the details below to schedule a meeting with our team.
             </CardDescription>
           </CardHeader>
-          <CardContent className="space-y-8 h-[50vh] overflow-y-auto">
+          <CardContent className="space-y-8">
             <FormField
               control={form.control}
               name="memberId"

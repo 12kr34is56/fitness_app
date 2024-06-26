@@ -1,6 +1,4 @@
-
-
-export const dynamic = "force-dynamic"
+export const dynamic = "force-dynamic";
 import MeetingList from "@/app/_blocks/meeting-list";
 import { auth } from "@/core/auth/auth";
 import { db } from "@/core/client/client";
@@ -15,7 +13,7 @@ const ScheduleList = async () => {
 
     const user = await db.user.findUnique({
       where: {
-        email: session.user.email,
+        email: session?.user?.email,
       },
     });
 
@@ -28,20 +26,17 @@ const ScheduleList = async () => {
     if (user.role === "TRAINER" || user.role === "USER") {
       schedules = await db.schedule.findMany({
         where: {
-          OR: [
-            {userId: user?.id},
-            {memberId: user?.email}
-          ]
+          OR: [{ userId: user?.id }, { memberId: user?.email }],
         },
         include: {
-          User: true
-        }
+          User: true,
+        },
       });
     } else {
       schedules = await db.schedule.findMany({
         include: {
-          User: true
-        }
+          User: true,
+        },
       });
     }
 
