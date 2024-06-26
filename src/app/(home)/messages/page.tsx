@@ -63,14 +63,6 @@ const MessageListPage = async () => {
     );
   }
 
-  // const messages = await db.message.findMany({
-  //   include: {
-  //     User: true,
-  //   },
-  //   orderBy: {
-  //     createdAt: "desc",
-  //   },
-  // });
 
   return (
     <>

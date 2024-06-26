@@ -18,7 +18,7 @@ import {
   DropdownMenuTrigger,
   DropdownMenuContent,
   DropdownMenuRadioGroup,
-  DropdownMenuRadioItem
+  DropdownMenuRadioItem,
 } from "@/components/ui/dropdown-menu";
 
 import { Textarea } from "@/components/ui/textarea";
@@ -50,18 +50,19 @@ export default function CreateNewMessage() {
     },
   });
 
-
   const [trainers, setTrainers] = useState([]);
 
   const fetchTrainer = async () => {
     try {
-      const response = await fetch('/api/trainers');
+      const response = await fetch("/api/trainers");
       const data = await response.json();
       // Filter the trainers based on role
-      const trainerData = data?.filter((user: { role: string; }) => user.role === 'TRAINER');
+      const trainerData = data?.filter(
+        (user: { role: string }) => user.role === "TRAINER"
+      );
       setTrainers(trainerData);
     } catch (error) {
-      console.error('Error fetching trainers:', error);
+      console.error("Error fetching trainers:", error);
     }
   };
 
@@ -86,15 +87,16 @@ export default function CreateNewMessage() {
         ...values,
       };
 
-      const response = await fetch('/api/mess/create', {
-        method: 'POST',
+      const response = await fetch("/api/mess/create", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify(payload),
       });
 
-      const data: { error?: string; success?: string; feedback?: string } = await response.json();
+      const data: { error?: string; success?: string; feedback?: string } =
+        await response.json();
 
       if (data.error) {
         toast.error(data.error);
@@ -105,7 +107,7 @@ export default function CreateNewMessage() {
 
       if (data.success) {
         toast.success(data?.feedback);
-        console.log(data,"DataSuccess");
+        console.log(data, "DataSuccess");
         setIsPending(false);
         form.reset();
         router.push("/messages");
@@ -130,7 +132,6 @@ export default function CreateNewMessage() {
         onSubmit={form.handleSubmit(onSubmit)}
         className="h-full p-4 pt-2 gap-1 flex flex-col w-full"
       >
-
         <FormField
           control={form.control}
           name="to"
@@ -140,14 +141,20 @@ export default function CreateNewMessage() {
               <FormControl>
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
-                    <Button variant="outline">{field.value || 'Select Trainer'}</Button>
+                    <Button variant="outline">{field.value || "Select"}</Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent className="w-56">
-                    <DropdownMenuRadioGroup value={field.value} onValueChange={(value) => {
-                      field.onChange(value); // Update form value
-                    }}>
+                    <DropdownMenuRadioGroup
+                      value={field.value}
+                      onValueChange={(value) => {
+                        field.onChange(value);
+                      }}
+                    >
                       {trainers.map((trainer: any) => (
-                        <DropdownMenuRadioItem key={trainer.id} value={trainer.email}>
+                        <DropdownMenuRadioItem
+                          key={trainer.id}
+                          value={trainer.email}
+                        >
                           {trainer.name}
                         </DropdownMenuRadioItem>
                       ))}
@@ -196,7 +203,7 @@ export default function CreateNewMessage() {
         />
         <Button disabled={isPending} type="submit" className="w-full">
           {isPending && <Loader className="mr-2 h-4 w-4 animate-spin" />}
-          {isPending ? "Sending..." : "Send Mail"}
+          {isPending ? "Creating..." : "Create Connection"}
         </Button>
       </form>
     </Form>
