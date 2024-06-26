@@ -2,7 +2,7 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { z } from "zod";
+import { any, z } from "zod";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -13,6 +13,14 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem
+} from "@/components/ui/dropdown-menu";
+
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
 import { Input } from "@/components/ui/input";
@@ -21,6 +29,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { getSession } from "next-auth/react";
 import { Session } from "next-auth";
+import { db } from "@/core/client/client";
 
 const FormSchema = z.object({
   subject: z.string(),
@@ -41,6 +50,21 @@ export default function CreateNewMessage() {
     },
   });
 
+
+  const [trainers, setTrainers] = useState([]);
+
+  const fetchTrainer = async () => {
+    try {
+      const response = await fetch('/api/trainers');
+      const data = await response.json();
+      // Filter the trainers based on role
+      const trainerData = data?.filter((user: { role: string; }) => user.role === 'TRAINER');
+      setTrainers(trainerData);
+    } catch (error) {
+      console.error('Error fetching trainers:', error);
+    }
+  };
+
   useEffect(() => {
     const fetchSession = async () => {
       try {
@@ -52,6 +76,7 @@ export default function CreateNewMessage() {
     };
 
     fetchSession();
+    fetchTrainer();
   }, []);
 
   async function onSubmit(values: z.infer<typeof FormSchema>) {
@@ -80,6 +105,7 @@ export default function CreateNewMessage() {
 
       if (data.success) {
         toast.success(data?.feedback);
+        console.log(data,"DataSuccess");
         setIsPending(false);
         form.reset();
         router.push("/messages");
@@ -104,19 +130,36 @@ export default function CreateNewMessage() {
         onSubmit={form.handleSubmit(onSubmit)}
         className="h-full p-4 pt-2 gap-1 flex flex-col w-full"
       >
+
         <FormField
           control={form.control}
           name="to"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>To:</FormLabel>
+              <FormLabel>Trainer: </FormLabel>
               <FormControl>
-                <Input type="email" placeholder="John@example.com" {...field} />
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="outline">{field.value || 'Select Trainer'}</Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent className="w-56">
+                    <DropdownMenuRadioGroup value={field.value} onValueChange={(value) => {
+                      field.onChange(value); // Update form value
+                    }}>
+                      {trainers.map((trainer: any) => (
+                        <DropdownMenuRadioItem key={trainer.id} value={trainer.email}>
+                          {trainer.name}
+                        </DropdownMenuRadioItem>
+                      ))}
+                    </DropdownMenuRadioGroup>
+                  </DropdownMenuContent>
+                </DropdownMenu>
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
+
         <FormField
           control={form.control}
           name="subject"
@@ -130,6 +173,7 @@ export default function CreateNewMessage() {
             </FormItem>
           )}
         />
+
         <FormField
           control={form.control}
           name="text"
