@@ -112,12 +112,12 @@ const Conversations = () => {
             <div className="flex flex-col w-full text-sm text-slate-500">
               <div className="flex justify-between max-sm:justify-start gap-4">
                 <h2 className="font-semibold text-slate-600 dark:text-slate-300">{convo.participant.name}</h2>
-                <button
+                {/* <button
                   onClick={(event) => { event.preventDefault(); handleDeleteClick(convo.id); }}
                   className="bg-white hover:bg-white/20 hover:border hover:text-white px-2 text-xs rounded-sm"
                 >
                   Close
-                </button>
+                </button> */}
               </div>
               <p>{convo?.participant?.email}</p>
               <div className="mt-2 text-xs text-slate-400 flex justify-between w-full">
