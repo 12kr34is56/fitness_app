@@ -25,8 +25,8 @@ interface NavProps {
 export function Nav({ links, isCollapsed }: NavProps) {
   const pathname = usePathname();
   return (
-    <div className="group flex border h-full w-full flex-col gap-4 py-2  ">
-      <nav className="flex md:flex-col flex-row md:h-20  min-w-80 w-full gap-1 px-2">
+    <div className="group flex  h-full w-full flex-col gap-4 py-2">
+      {/* <nav className="flex md:flex-col flex-row md:h-20  min-w-80 w-full gap-1 px-2">
         {links.map((link, index) => (
           <Link
             key={index}
@@ -54,7 +54,7 @@ export function Nav({ links, isCollapsed }: NavProps) {
             )}
           </Link>
         ))}
-      </nav>
+      </nav> */}
     </div>
   );
 }
