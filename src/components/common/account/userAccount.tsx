@@ -1,0 +1,56 @@
+import { Separator } from "@/components/ui/separator";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { User } from "@prisma/client";
+import { Edit } from "lucide-react";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+
+import ChangeTrainerForm from "./changeTrainerForm";
+
+function UserAccount({ userData }: { userData: User }) {
+  return (
+    <div className="w-full">
+      <Table>
+        <TableBody>
+          <TableRow>
+            <TableCell className="text-left w-full">
+              <span className="font-medium">Trainer Name</span>
+            </TableCell>
+            <TableCell className="inline-flex items-center justify-end gap-5 w-full">
+              <span className="font-medium text-right">
+                {userData?.trainersNames ? userData?.trainersNames : "NA"}
+              </span>
+              <AlertDialog>
+                <AlertDialogTrigger>
+                  <Edit className="w-4 h-4" />
+                </AlertDialogTrigger>
+                <AlertDialogContent>
+                  <ChangeTrainerForm AlertDialogFooter={AlertDialogFooter} />
+                </AlertDialogContent>
+              </AlertDialog>
+            </TableCell>
+          </TableRow>
+          <Separator className="w-full" />
+        </TableBody>
+      </Table>
+    </div>
+  );
+}
+
+export default UserAccount;

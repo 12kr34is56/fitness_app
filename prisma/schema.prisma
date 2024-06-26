@@ -9,6 +9,12 @@ enum ROLE {
   TRAINER
 }
 
+enum SEX {
+  MALE
+  FEMALE
+  OTHER
+}
+
 generator client {
   provider = "prisma-client-js"
 }
@@ -19,10 +25,14 @@ model User {
   email          String          @unique
   emailVerified  DateTime?
   image          String?
+  sex            SEX?
   accounts       Account[]
   sessions       Session[]
   role           ROLE            @default(USER)
   Authenticators Authenticator[]
+
+  trainersNames String?
+  studentsNames String?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

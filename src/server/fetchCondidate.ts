@@ -2,6 +2,7 @@
 
 import { db } from "@/core/client/client";
 
+// ******************************************************************
 export async function fetchTrainers() {
   try {
     const response = await db.user.findMany({
@@ -23,6 +24,34 @@ export async function fetchTrainers() {
   }
 }
 
+// *******************************************************************
+export async function AllMembers() {
+  try {
+    const response = await db.user.findMany({
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        image: true,
+        role: true,
+        sex: true,
+      },
+      where: {
+        role: {
+          not: {
+            equals: "ADMIN",
+          },
+        },
+      },
+    });
+    return response;
+  } catch (error) {
+    console.error("Error fetching trainers:", error);
+    return [];
+  }
+}
+
+// ****************************************************************
 export async function createMessage(values: {
   subject: string;
   text: string;
