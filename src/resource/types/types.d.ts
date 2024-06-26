@@ -1,8 +1,8 @@
 import { User } from "@prisma/client";
-import {Server as SocketIOServer} from 'socket.io';
-import {Server as NetServer, Socket} from "net";
+import { Server as SocketIOServer } from "socket.io";
+import { Server as NetServer, Socket } from "net";
 
-// AUTH INTERFACE 
+// AUTH INTERFACE
 export interface NextAuthProviderInterface {
   children?: React.ReactNode;
 }
@@ -51,19 +51,33 @@ interface Item {
 interface Items {
   items?: Item[];
 }
-// prisma model types
-const user:User = {}
-const account:Account = {}
-const session:Session = {}
-const verificationToken:VerificationToken = {}
 
-
-export type NextApiResponseServerIo=NextApiResponse & {
-  socket: Socket &{
-      server: NetServer & {
-          io: SocketIOServer;
-      }
-  }
+export interface Schedule {
+  id: string;
+  date: string | "";
+  time: string | "";
+  meetingLink: string | "";
+  memberId: string | "";
+  subject: string | "";
+  body: string | "";
+  createdAt: Date | "";
+  updatedAt: Date | "";
+  userId: string | "";
+  User: User ;
 }
+
+// prisma model types
+const user: User = {};
+const account: Account = {};
+const session: Session = {};
+const verificationToken: VerificationToken = {};
+
+export type NextApiResponseServerIo = NextApiResponse & {
+  socket: Socket & {
+    server: NetServer & {
+      io: SocketIOServer;
+    };
+  };
+};
 
 export type TableOfContents = Items;
