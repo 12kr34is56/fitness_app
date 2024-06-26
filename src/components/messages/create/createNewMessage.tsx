@@ -29,7 +29,6 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { getSession } from "next-auth/react";
 import { Session } from "next-auth";
-import { db } from "@/core/client/client";
 
 const FormSchema = z.object({
   subject: z.string(),
