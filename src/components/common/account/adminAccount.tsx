@@ -140,7 +140,7 @@ export function AdminAccount() {
   React.useEffect(() => {
     async function fetchData() {
       const response = await AllMembers();
-      setData(response);
+      setData(response as any);
       setLoading(false);
     }
 
@@ -178,7 +178,8 @@ export function AdminAccount() {
   return (
     <div className="w-full">
       <div className="w-full py-10 px-4">
-        <h2>All Members List</h2>
+        <h2 className="text-xl font-semibold">Users Management</h2>
+        <p>View & Manage users, Change details ect.</p>
       </div>
       <div className="flex items-center py-4">
         <Input
