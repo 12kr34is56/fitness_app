@@ -225,7 +225,7 @@ export function TrainerAccount({ userData }: { userData: User }) {
                       column.toggleVisibility(!!value)
                     }
                   >
-                    {column.id}
+                    {column?.id}
                   </DropdownMenuCheckboxItem>
                 );
               })}
@@ -284,7 +284,7 @@ export function TrainerAccount({ userData }: { userData: User }) {
       </div>
       <div className="flex items-center justify-end space-x-2 py-4">
         <div className="flex-1 text-sm text-muted-foreground">
-          {table.getRowModel().rows.length} / {data.length}
+          {table.getRowModel().rows?.length} / {data?.length}
         </div>
         <div className="space-x-2">
           <Button
