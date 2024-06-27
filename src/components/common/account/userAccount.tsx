@@ -29,7 +29,7 @@ function UserAccount({ userData }: { userData: User }) {
             </TableCell>
             <TableCell className="inline-flex items-center justify-end gap-5 w-full">
               <span className="font-medium text-right">
-                {userData?.trainersNames ? userData?.trainersNames : "NA"}
+                {userData?.trainerName ? userData?.trainerName : "NA"}
               </span>
               <AlertDialog>
                 <AlertDialogTrigger>

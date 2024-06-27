@@ -31,7 +31,7 @@ model User {
   role           ROLE            @default(USER)
   Authenticators Authenticator[]
 
-  trainersNames String?
+  trainerName String?
   studentsNames String?
 
   createdAt DateTime @default(now())

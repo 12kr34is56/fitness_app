@@ -13,7 +13,15 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import { ArrowUpDown, ChevronDown, Loader, MoreHorizontal } from "lucide-react";
+import {
+  ArrowUpDown,
+  ChevronDown,
+  Copy,
+  Edit,
+  Eye,
+  Loader,
+  MoreHorizontal,
+} from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -23,6 +31,8 @@ import {
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
+  DropdownMenuSub,
+  DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
@@ -40,6 +50,13 @@ import { AllMembers } from "@/server/fetchCondidate";
 import Image from "next/image";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import avatar from "@/assets/icon/user_149071.png";
+import {
+  AlertDialog,
+  AlertDialogContent,
+  AlertDialogTrigger,
+  AlertDialogFooter,
+} from "@/components/ui/alert-dialog";
+import MembersDetailsForm from "./membersDetailsForm";
 
 export type Members = {
   id: string;
@@ -80,8 +97,8 @@ export const columns: ColumnDef<Members>[] = [
 
   {
     accessorKey: "sex",
-    header: "Sex",
-    cell: ({ row }) => <div className="capitalize">{row.getValue("sex")}</div>,
+    header: "Gender",
+    cell: ({ row }) => <div className="capitalize">{row.getValue("sex") || "Null"}</div>,
   },
   {
     accessorKey: "email",
@@ -99,7 +116,7 @@ export const columns: ColumnDef<Members>[] = [
     id: "actions",
     enableHiding: false,
     cell: ({ row }) => {
-      const payment = row.original;
+      const member = row.original;
 
       return (
         <DropdownMenu>
@@ -112,13 +129,26 @@ export const columns: ColumnDef<Members>[] = [
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuItem
-              onClick={() => navigator.clipboard.writeText(payment.id)}
+              className="w-full inline-flex items-center gap-2"
+              onClick={() => navigator.clipboard.writeText(member?.email)}
             >
-              Copy payment ID
+              <Copy className="w-4 h-4" />
+              Copy email ID
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>View customer</DropdownMenuItem>
-            <DropdownMenuItem>View payment details</DropdownMenuItem>
+            <DropdownMenuSub>
+              <DropdownMenuSubTrigger>
+                <AlertDialog>
+                  <AlertDialogTrigger className="w-full inline-flex items-end gap-2">
+                    <Eye className="w-4 h-4" />
+                    View Details
+                  </AlertDialogTrigger>
+                  <AlertDialogContent className="p-0 overflow-hidden">
+                    <MembersDetailsForm AlertDialogFooter={AlertDialogFooter} data={member} />
+                  </AlertDialogContent>
+                </AlertDialog>
+              </DropdownMenuSubTrigger>
+            </DropdownMenuSub>
           </DropdownMenuContent>
         </DropdownMenu>
       );
@@ -183,14 +213,15 @@ export function AdminAccount() {
       </div>
       <div className="flex items-center py-4">
         <Input
-          placeholder="Filter by names & role ..."
+          placeholder="Filter by names, role & email ..."
           value={
-            (table.getColumn("name" && "role")?.getFilterValue() as string) ??
-            ""
+            (table
+              .getColumn("name" && "role" && "email")
+              ?.getFilterValue() as string) ?? ""
           }
           onChange={(event) =>
             table
-              .getColumn("name" && "role")
+              .getColumn("name" && "role" && "email")
               ?.setFilterValue(event.target.value)
           }
           className="max-w-sm"
