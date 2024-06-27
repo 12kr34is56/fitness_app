@@ -6,6 +6,8 @@ import NextAuthProvider from "@/core/providers/Provider";
 import { ThemeProvider } from "@/core/providers/theme-provider";
 import { Toaster } from "sonner";
 import { SocketProvider } from "@/core/providers/socket-provider";
+import { SpeedInsights } from "@vercel/speed-insights/next";
+
 const fontSans = FontSans({
   subsets: ["latin", "latin-ext"],
   variable: "--font-sans",
@@ -37,10 +39,9 @@ export default function RootLayout({
             enableSystem
             disableTransitionOnChange
           >
-            <SocketProvider>
-              {children}
-            </SocketProvider>
+            <SocketProvider>{children}</SocketProvider>
             <Toaster richColors />
+            <SpeedInsights />
           </ThemeProvider>
         </NextAuthProvider>
       </body>

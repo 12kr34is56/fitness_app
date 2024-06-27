@@ -4,10 +4,10 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "prisma generate && next build",
     "start": "next start",
     "lint": "next lint",
-    "db": "pnpm db:generate && pnpm db:migrate && pnpm db:studio",
+    "db": "pnpm db:generate && pnpm db:studio",
     "db:generate": "prisma generate",
     "db:migrate": "prisma migrate dev",
     "db:studio": "prisma studio"
@@ -37,6 +37,7 @@
     "@radix-ui/react-tooltip": "^1.0.7",
     "@t3-oss/env-nextjs": "^0.10.1",
     "@tanstack/react-table": "^8.17.3",
+    "@vercel/speed-insights": "^1.0.12",
     "bcryptjs": "^2.4.3",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
@@ -51,6 +52,7 @@
     "react-dom": "^18.3.1",
     "react-hook-form": "^7.51.5",
     "react-resizable-panels": "^2.0.19",
+    "sharp": "^0.33.4",
     "socket.io": "^4.7.5",
     "socket.io-client": "^4.7.5",
     "sonner": "^1.4.41",
