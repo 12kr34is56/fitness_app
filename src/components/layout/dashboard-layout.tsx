@@ -44,7 +44,6 @@ const DashboardLayout = ({
 }) => {
   const defaultLayout = [20, 80];
   const [isCollapsed, setIsCollapsed] = useState(false);
-   console.log(role);
   const userRoute = [
     {
       title: language.HOME,
