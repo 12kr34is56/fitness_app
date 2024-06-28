@@ -86,7 +86,6 @@ export const CreateScheduleAction = async (
     revalidatePath("/schedules","page")
     return { success: "Mail Sent successfully." };
   } catch (error) {
-    console.log(error);
     return { error: "Something went wrong." };
   }
 };

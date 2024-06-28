@@ -28,7 +28,6 @@ function formatTimeWithoutSeconds(date: Date): string {
 }
 type Messages = (Message & { User: User }) | null;
 const MessagesList = ({ messages , showAddMessageButton }: { messages: Messages[] , showAddMessageButton: boolean }) => {
-  console.log(messages);
     return (
     <Card className="w-full h-full p-0 border-none shadow-none">
       <CardHeader className="p-4 pb-0 pt-6">

@@ -47,7 +47,6 @@ export const CreateNewMessageAction = async (
     revalidatePath("/messages","page")
     return { success: "Mail Sent successfully." };
   } catch (error) {
-    console.log(error);
     return { error: "Something went wrong." };
   }
 };

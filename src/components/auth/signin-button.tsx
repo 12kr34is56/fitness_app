@@ -27,7 +27,6 @@ const SignInButton = () => {
         redirect: true,
       });
     } catch (error: any) {
-      // console.log(error);
       toast.error(error?.message);
       setLoading(false);
     } finally {

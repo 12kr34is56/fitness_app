@@ -17,7 +17,6 @@ import { TooltipProvider } from "../ui/tooltip";
 const MailLayout = ({ children }: { children: ReactNode }) => {
   const defaultLayout = [20, 80];
   const [isCollapsed, setIsCollapsed] = useState(false);
-  // console.log(isCollapsed);
 
   return (
     <TooltipProvider delayDuration={0}>
