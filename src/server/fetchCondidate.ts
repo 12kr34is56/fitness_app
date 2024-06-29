@@ -27,7 +27,7 @@ export async function fetchTrainers() {
 // *******************************************************************
 export async function AllMembers() {
   try {
-    const response = await db.user.findMany({
+    const users = await db.user.findMany({
       select: {
         id: true,
         name: true,
@@ -35,18 +35,43 @@ export async function AllMembers() {
         image: true,
         role: true,
         sex: true,
+        height: true,
+        weight: true,
+        trainerEmail: true,
+        studentsEmail: true,
+        age: true,
+        fitnessGoals: true,
       },
       where: {
         role: {
-          not: {
-            equals: "ADMIN",
-          },
+          not: "ADMIN",
         },
       },
     });
-    return response;
+
+    const usersWithStudentData = await Promise.all(users.map(async (user) => {
+      if (user.role === "TRAINER" && user.studentsEmail && user.studentsEmail.length > 0) {
+        const students = await db.user.findMany({
+          where: {
+            email: { in: user.studentsEmail },
+          },
+          select: {
+            name: true,
+            email: true,
+            image: true,
+          },
+        });
+        return {
+          ...user,
+          studentsData: students,
+        };
+      }
+      return user;
+    }));
+
+    return usersWithStudentData;
   } catch (error) {
-    console.error("Error fetching trainers:", error);
+    console.error("Error fetching members:", error);
     return [];
   }
 }

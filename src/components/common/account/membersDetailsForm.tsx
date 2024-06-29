@@ -2,7 +2,7 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { z } from "zod";
+import { any, z } from "zod";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -32,46 +32,42 @@ import {
 } from "@/components/ui/table";
 
 import { Input } from "@/components/ui/input";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { toast } from "sonner";
 import { Textarea } from "@/components/ui/textarea";
-import { useState } from "react";
+import { Key, useEffect, useState } from "react";
 import { Loader, X } from "lucide-react";
 import { AlertDialogCancel } from "@/components/ui/alert-dialog";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { User } from "@prisma/client";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Separator } from "@/components/ui/separator";
+import Image from "next/image";
+import { getTrainers } from "@/core/actions/get-trainers";
+import { updateUser } from "@/core/actions/update-user-role-and-trainermail";
+
+import { ROLE } from "@prisma/client";
+import { useRouter } from "next/navigation";
 
 const formSchema = z.object({
-  fullname: z.string().min(2, {
-    message: "Name must be at least 2 characters.",
-  }),
-  email: z.string().email({
-    message: "Enter correct email address.",
-  }),
-  role: z.string().min(2, {
-    message: "Role must be at least 2 characters.",
-  }),
-  sex: z.string().min(2, {
-    message: "Sex must be at least 2 characters.",
-  }),
-  age: z.string().min(18, {
-    message: "Age must be at least 18 years old.",
-  }),
-  weight: z.string().min(1, {
-    message: "Weight must be at least 1.",
-  }),
-  height: z.string().min(1, {
-    message: "Height must be at least 1.",
-  }),
-  goal: z.string().min(2, {
-    message: "Goal must be at least 2 characters.",
-  }),
-  trainerName: z.string().min(2, {
-    message: "Name must be at least 2 characters.",
-  }),
+  fullname: z.string(),
+  email: z.string(),
+  role: z.enum([ROLE.ADMIN, ROLE.USER, ROLE.TRAINER]),
+  sex: z.string(),
+  age: z.string(),
+  weight: z.string(),
+  height: z.string(),
+  goal: z.string(),
+  trainerName: z.string().optional(),
   studentsNames: z.array(z.string()),
 });
+
+interface TrainersSchema {
+  email: string;
+  name: string | null;
+  image: string | null;
+}
+
 
 function MembersDetailsForm({
   AlertDialogFooter,
@@ -80,8 +76,30 @@ function MembersDetailsForm({
   data: any;
   AlertDialogFooter: any;
 }) {
+  const router = useRouter()
   const [isPending, setIsPending] = useState(false);
-  // 1. Define your form.
+  const roles = ["ADMIN", "USER", "TRAINER"]; 
+  const [trainers, setTrainers] = useState<TrainersSchema[] | null>([]);
+
+  useEffect(() => {
+    const fetchTrainers = async () => {
+      try {
+        const { trainers: fetchedTrainers } = await getTrainers();
+        if (Array.isArray(fetchedTrainers)) {
+          const trainersData = fetchedTrainers as TrainersSchema[];
+          setTrainers(trainersData);
+        } else {
+          console.error("Invalid trainers data format:", fetchedTrainers);
+        }
+      } catch (error) {
+        console.error("Error fetching trainers:", error);
+      }
+    };
+  
+    fetchTrainers();
+  }, []);
+  
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -92,19 +110,19 @@ function MembersDetailsForm({
       weight: "",
       height: "",
       goal: "",
-      role: "",
+      role:data?.role,
       trainerName: "",
       studentsNames: [],
     },
   });
 
-  // 2. Define a submit handler.
-  function onSubmit(values: z.infer<typeof formSchema>) {
+  async function onSubmit(values: z.infer<typeof formSchema>) {
     setIsPending(true);
     try {
-      // 3. Send the data to your backend.
+      const res= await updateUser(data.id, { role: values.role, trainerEmail: values.trainerName });
       setIsPending(false);
-      toast.success(values.fullname);
+      toast.success("User Updated Successfully");
+      router.refresh()
     } catch (error) {
       setIsPending(false);
       toast.error("Something went wrong.");
@@ -147,10 +165,10 @@ function MembersDetailsForm({
                       <FormLabel className="w-full">Name</FormLabel>
                       <FormControl className="w-full">
                         <Input
+                          disabled
                           placeholder="Enter Name"
                           {...field}
                           value={field.value || data?.name}
-                          // disabled
                         />
                       </FormControl>
                       <FormMessage />
@@ -183,6 +201,7 @@ function MembersDetailsForm({
                       <FormLabel className="w-full">Gender</FormLabel>
                       <FormControl className="w-full">
                         <Input
+                          disabled
                           placeholder="Enter gender"
                           {...field}
                           value={field.value || data?.sex}
@@ -200,6 +219,7 @@ function MembersDetailsForm({
                       <FormLabel className="w-full">Age</FormLabel>
                       <FormControl className="w-full">
                         <Input
+                          disabled
                           placeholder="Enter Age"
                           {...field}
                           value={field.value || data?.age}
@@ -217,6 +237,7 @@ function MembersDetailsForm({
                       <FormLabel className="w-full">Weight</FormLabel>
                       <FormControl className="w-full">
                         <Input
+                          disabled
                           placeholder="Enter Weight"
                           {...field}
                           value={field.value || data?.weight}
@@ -234,6 +255,7 @@ function MembersDetailsForm({
                       <FormLabel className="w-full">Height</FormLabel>
                       <FormControl className="w-full">
                         <Input
+                          disabled
                           placeholder="Enter Height"
                           {...field}
                           value={field.value || data?.height}
@@ -251,141 +273,157 @@ function MembersDetailsForm({
                     <FormItem className="w-full flex flex-col items-start justify-center gap-1">
                       <FormLabel className="w-full">Role</FormLabel>
                       <FormControl className="w-full">
-                        <Input
-                          placeholder="Enter Role"
-                          {...field}
+                        <Select
                           value={field.value || data?.role}
-                        />
+                          onValueChange={(value) => field.onChange(value)}
+                        >
+                          <SelectTrigger>
+                            <SelectValue placeholder="Select Role" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {roles.map((role, index) => (
+                              <SelectItem key={index} value={role}>
+                                {role}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
                       </FormControl>
                       <FormMessage />
                     </FormItem>
                   )}
                 />
 
-                {data?.role === "USER" && (
-                  <FormField
-                    control={form.control}
-                    name="trainerName"
-                    render={({ field }) => (
-                      <FormItem className="w-full flex flex-col items-start justify-center gap-1">
-                        <FormLabel className="w-full">
-                          Current Trainer
-                        </FormLabel>
-                        <FormControl className="w-full">
-                          <Input
-                            placeholder="Enter Trainer Name"
-                            {...field}
-                            value={field.value || data?.trainerName}
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                )}
+{form.watch('role') === "USER" && (
+  <FormField
+    control={form.control}
+    name="trainerName"
+    render={({ field }) => (
+      <FormItem className="w-full flex flex-col items-start justify-center gap-1">
+        <FormLabel className="w-full">Current Trainer</FormLabel>
+        <FormControl className="w-full">
+          <Select
+            value={field.value || data?.trainerEmail || "No trainer selected"}
+            onValueChange={(value) => field.onChange(value)}
+          >
+            <SelectTrigger>
+              <SelectValue placeholder="Select Trainer" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="No trainer selected">No trainer selected</SelectItem>
+              {trainers && trainers.map((trainer) => (
+                <SelectItem key={trainer.email} value={trainer.email}>
+                  {trainer.name} ({trainer.email})
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </FormControl>
+        <FormMessage />
+      </FormItem>
+    )}
+  />
+)}
 
-                {data?.role === "TRAINER" && (
-                  <FormField
-                    control={form.control}
-                    name="studentsNames"
-                    render={({ field }) => (
-                      <FormItem className="w-full flex flex-col items-start justify-center gap-1">
-                        <FormLabel className="w-full">Students Names</FormLabel>
-                        <FormControl className="w-full">
-                          <DropdownMenu>
-                            <DropdownMenuTrigger className="w-full border rounded-xl text-sm px-4 py-2">
-                              List of students
-                            </DropdownMenuTrigger>
-                            <DropdownMenuContent>
-                              {data?.studentsNames ? (
-                                data?.studentsNames?.map(
-                                  (
-                                    {
-                                      studentName,
-                                      studentEmail,
-                                    }: {
-                                      studentName: string;
-                                      studentEmail: string;
-                                    },
-                                    index: number
-                                  ) => (
-                                    <DropdownMenuItem
-                                      key={index}
-                                      className="w-full flex flex-col"
-                                    >
-                                      <TableHeader>
-                                        <TableRow>
-                                          <TableHead>Name</TableHead>
-                                          <TableHead>Email</TableHead>
-                                        </TableRow>
-                                      </TableHeader>
-                                      <Separator />
-                                      <TableBody>
-                                        <TableRow>
-                                          <TableCell>{studentName}</TableCell>
-                                          <TableCell>{studentEmail}</TableCell>
-                                        </TableRow>
-                                      </TableBody>
-                                      <DropdownMenuSeparator />
-                                    </DropdownMenuItem>
-                                  )
-                                )
-                              ) : (
-                                <p className="text-sm px-3 py-2 text-center">
-                                  No students yet
-                                </p>
-                              )}
-                            </DropdownMenuContent>
-                          </DropdownMenu>
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
+            {data?.role === "TRAINER" && (
+              <FormField
+                control={form.control}
+                name="studentsNames"
+                render={({ field }) => (
+                  <FormItem className="w-full flex flex-col items-start justify-center gap-1">
+                    <FormLabel className="w-full">Students Names</FormLabel>
+                    <FormControl className="w-full">
+                      <DropdownMenu>
+                        <DropdownMenuTrigger className="w-full border rounded-xl text-sm px-4 py-2">
+                          List of students
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent>
+                          {data.studentsData && data.studentsData.length > 0 ? (
+                            data.studentsData.map(
+                              ({ name, email, image }: any, index: Key | null | undefined) => (
+                                <DropdownMenuItem
+                                  key={index}
+                                  className="w-full flex flex-col"
+                                >
+                                  <Table>
+                                    <TableHeader>
+                                      <TableRow>
+                                        <TableHead>Image</TableHead>
+                                        <TableHead>Name</TableHead>
+                                        <TableHead>Email</TableHead>
+                                      </TableRow>
+                                    </TableHeader>
+                                    <Separator />
+                                    <TableBody>
+                                      <TableRow>
+                                        <TableCell><Image className={`size-8 rounded-full`} height={100} width={100} alt="User Image" src={image}/></TableCell>
+                                        <TableCell>{name}</TableCell>
+                                        <TableCell>{email}</TableCell>
+                                      </TableRow>
+                                    </TableBody>
+                                  </Table>
+                                  <DropdownMenuSeparator />
+                                </DropdownMenuItem>
+                              )
+                            )
+                          ) : (
+                            <p className="text-sm px-3 py-2 text-center">
+                              No students yet
+                            </p>
+                          )}
+                        </DropdownMenuContent>
+                      </DropdownMenu>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
                 )}
+              />
+            )}
 
-                {data?.role === "USER" && (
-                  <FormField
-                    control={form.control}
-                    name="goal"
-                    render={({ field }) => (
-                      <FormItem className="w-full flex flex-col items-start justify-center gap-1">
-                        <FormLabel className="w-full">Goal</FormLabel>
-                        <FormControl className="w-full">
-                          <Textarea
-                            placeholder="Enter Goal..."
-                            {...field}
-                            value={field.value || data?.goal}
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
+            {data?.role === "USER" && (
+              <FormField
+                control={form.control}
+                name="goal"
+                render={({ field }) => (
+                  <FormItem className="w-full flex flex-col items-start justify-center gap-1">
+                    <FormLabel className="w-full">Goal</FormLabel>
+                    <FormControl className="w-full">
+                      <Textarea
+                        disabled
+                        placeholder="Enter Goal..."
+                        {...field}
+                        value={field.value || data?.fitnessGoals}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
                 )}
+              />
+            )}
 
-                <div className="w-full grid grid-cols-3 gap-2 items-center justify-center">
-                  <Button
-                    disabled={isPending}
-                    type="submit"
-                    className="w-full col-span-2"
-                  >
-                    {isPending && (
-                      <Loader className="mr-2 h-4 w-4 animate-spin" />
-                    )}
-                    {isPending ? "Saving..." : "Save"}
-                  </Button>
-                  <AlertDialogCancel className="col-span-1">
-                    Close
-                  </AlertDialogCancel>
-                </div>
-              </form>
-            </Form>
-          </ScrollArea>
-        </div>
-      </AlertDialogFooter>
-    </Table>
-  );
+            <div className="w-full grid grid-cols-3 gap-2 items-center justify-center">
+              <Button
+                disabled={isPending}
+                type="submit"
+                className="w-full col-span-2"
+              >
+                {isPending && (
+                  <Loader className="mr-2 h-4 w-4 animate-spin" />
+                )}
+                {isPending ? "Saving..." : "Save"}
+              </Button>
+              <AlertDialogCancel className="col-span-1">
+                Close
+              </AlertDialogCancel>
+            </div>
+          </form>
+        </Form>
+      </ScrollArea>
+    </div>
+  </AlertDialogFooter>
+</Table>
+);
 }
 
 export default MembersDetailsForm;
+
