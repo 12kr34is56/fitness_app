@@ -96,14 +96,17 @@ export const columns: ColumnDef<Members>[] = [
   },
 
   {
-    accessorKey: "sex",
-    header: "Gender",
-    cell: ({ row }) => <div className="capitalize">{row.getValue("sex") || "Null"}</div>,
-  },
-  {
     accessorKey: "email",
     header: "Email",
     cell: ({ row }) => <div className="lowercase">{row.getValue("email")}</div>,
+  },
+
+  {
+    accessorKey: "sex",
+    header: "Gender",
+    cell: ({ row }) => (
+      <div className="capitalize">{row.getValue("sex") || "Null"}</div>
+    ),
   },
 
   {
@@ -144,7 +147,10 @@ export const columns: ColumnDef<Members>[] = [
                     View Details
                   </AlertDialogTrigger>
                   <AlertDialogContent className="p-0 overflow-hidden">
-                    <MembersDetailsForm AlertDialogFooter={AlertDialogFooter} data={member} />
+                    <MembersDetailsForm
+                      AlertDialogFooter={AlertDialogFooter}
+                      data={member}
+                    />
                   </AlertDialogContent>
                 </AlertDialog>
               </DropdownMenuSubTrigger>

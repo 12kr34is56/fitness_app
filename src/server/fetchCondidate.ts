@@ -51,6 +51,31 @@ export async function AllMembers() {
   }
 }
 
+// *******************************************************************
+export async function AllUsers() {
+  try {
+    const response = await db.user.findMany({
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        image: true,
+        role: true,
+        sex: true,
+      },
+      where: {
+        role: {
+          notIn: ["ADMIN", "TRAINER"],
+        },
+      },
+    });
+    return response;
+  } catch (error) {
+    console.error("Error fetching trainers:", error);
+    return [];
+  }
+}
+
 // ****************************************************************
 export async function createMessage(values: {
   subject: string;

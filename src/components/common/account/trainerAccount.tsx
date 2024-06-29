@@ -13,7 +13,7 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import { ArrowUpDown, ChevronDown, MoreHorizontal } from "lucide-react";
+import { ArrowUpDown, ChevronDown, Eye, MoreHorizontal } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -23,6 +23,8 @@ import {
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
+  DropdownMenuSub,
+  DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
@@ -35,45 +37,14 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { User } from "@prisma/client";
-
-const data: Students[] = [
-  {
-    id: "m5gr84i9",
-    name: "Kenter",
-    sex: "male",
-    email: "ken99@yahoo.com",
-  },
-  {
-    id: "3u1reuv4",
-    name: "Abe",
-    sex: "female",
-    email: "Abe45@gmail.com",
-  },
-  {
-    id: "derv1ws0",
-    name: "Monserrat",
-    sex: "other",
-    email: "Monserrat44@gmail.com",
-  },
-  {
-    id: "5kma53ae",
-    name: "Silas",
-    sex: "male",
-    email: "Silas22@gmail.com",
-  },
-  {
-    id: "bhqecj4p",
-    name: "Carmella",
-    sex: "female",
-    email: "carmella@hotmail.com",
-  },
-  {
-    id: "bhquecj4p",
-    name: "Carmella",
-    sex: "other",
-    email: "carmella@hotmail.com",
-  },
-];
+import { AllUsers } from "@/server/fetchCondidate";
+import {
+  AlertDialog,
+  AlertDialogContent,
+  AlertDialogTrigger,
+  AlertDialogFooter,
+} from "@/components/ui/alert-dialog";
+import MembersDetailsForm from "./membersDetailsForm";
 
 export type Students = {
   id: string;
@@ -92,46 +63,32 @@ export const columns: ColumnDef<Students>[] = [
   },
   {
     accessorKey: "name",
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Name
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
-      );
-    },
-    cell: ({ row }) => <div className="lowercase">{row.getValue("name")}</div>,
+    header: "Name",
+    cell: ({ row }) => <div className="capitalize">{row.getValue("name")}</div>,
+  },
+
+  {
+    accessorKey: "email",
+    header: "Email",
+    cell: ({ row }) => <div className="lowercase">{row.getValue("email")}</div>,
   },
 
   {
     accessorKey: "sex",
-    header: "Sex",
+    header: "Gender",
     cell: ({ row }) => <div className="capitalize">{row.getValue("sex")}</div>,
   },
   {
-    accessorKey: "email",
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Email
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
-      );
-    },
-    cell: ({ row }) => <div className="lowercase">{row.getValue("email")}</div>,
+    accessorKey: "role",
+    header: "Role",
+    cell: ({ row }) => <div className="capitalize">{row.getValue("role")}</div>,
   },
 
   {
     id: "actions",
     enableHiding: false,
     cell: ({ row }) => {
-      const payment = row.original;
+      const user = row.original;
 
       return (
         <DropdownMenu>
@@ -144,13 +101,29 @@ export const columns: ColumnDef<Students>[] = [
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuItem
-              onClick={() => navigator.clipboard.writeText(payment.id)}
+              className="w-full inline-flex items-center gap-2"
+              onClick={() => navigator.clipboard.writeText(user?.email)}
             >
-              Copy payment ID
+              Copy Email ID
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>View customer</DropdownMenuItem>
-            <DropdownMenuItem>View payment details</DropdownMenuItem>
+
+            <DropdownMenuSub>
+              <DropdownMenuSubTrigger>
+                <AlertDialog>
+                  <AlertDialogTrigger className="w-full inline-flex items-end gap-2">
+                    <Eye className="w-4 h-4" />
+                    View Details
+                  </AlertDialogTrigger>
+                  <AlertDialogContent className="p-0 overflow-hidden">
+                    <MembersDetailsForm
+                      AlertDialogFooter={AlertDialogFooter}
+                      data={user}
+                    />
+                  </AlertDialogContent>
+                </AlertDialog>
+              </DropdownMenuSubTrigger>
+            </DropdownMenuSub>
           </DropdownMenuContent>
         </DropdownMenu>
       );
@@ -158,7 +131,9 @@ export const columns: ColumnDef<Students>[] = [
   },
 ];
 
-export function TrainerAccount({ userData }: { userData: User }) {
+export function TrainerAccount() {
+  const [data, setData] = React.useState<Students[]>([]);
+  const [loading, setLoading] = React.useState(true);
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
@@ -166,6 +141,16 @@ export function TrainerAccount({ userData }: { userData: User }) {
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = React.useState({});
+
+  React.useEffect(() => {
+    async function fetchData() {
+      const response = await AllUsers();
+      setData(response as any);
+      setLoading(false);
+    }
+
+    fetchData();
+  }, []);
 
   const table = useReactTable({
     data,

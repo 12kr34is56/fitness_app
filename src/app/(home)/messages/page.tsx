@@ -37,34 +37,8 @@ const MessageListPage = async () => {
     },
   });
 
-  // if (user?.role !== "ADMIN" && user?.role !== "TRAINER") {
-  //   return (
-  //     <ConversationProvider>
-  //       <Card className="w-full h-fit p-0 border-none shadow-none">
-  //         <CardHeader className="p-4 pb-0 pt-6">
-  //           <CardTitle>Messages</CardTitle>
-  //           <CardDescription>
-  //             All of your messages at one place.
-  //           </CardDescription>
-  //           <div className="w-full flex gap-2 flex-row justify-between items-center ">
-  //             <div className="w-12">
-  //               <Link href={`/messages/create`}>
-  //                 <Button className="h-10 w-10" size="icon">
-  //                   <PlusCircle className="h-6 w-6" />
-  //                   <span className="sr-only">Create</span>
-  //                 </Button>
-  //               </Link>
-  //             </div>
-  //           </div>
-  //         </CardHeader>
-  //       </Card>
-  //       <Conversations />
-  //     </ConversationProvider>
-  //   );
-  // }
-
-  return (
-    <>
+  if (user?.role === "ADMIN") {
+    return (
       <ConversationProvider>
         <Card className="w-full h-fit p-0 border-none shadow-none">
           <CardHeader className="p-4 pb-0 pt-6">
@@ -82,6 +56,32 @@ const MessageListPage = async () => {
                 </Link>
               </div>
             </div>
+          </CardHeader>
+        </Card>
+        <Conversations />
+      </ConversationProvider>
+    );
+  }
+
+  return (
+    <>
+      <ConversationProvider>
+        <Card className="w-full h-fit p-0 border-none shadow-none">
+          <CardHeader className="p-4 pb-0 pt-6">
+            <CardTitle>Messages</CardTitle>
+            <CardDescription>
+              All of your messages at one place.
+            </CardDescription>
+            {/* <div className="w-full flex gap-2 flex-row justify-between items-center ">
+              <div className="w-12">
+                <Link href={`/messages/create`}>
+                  <Button className="h-10 w-10" size="icon">
+                    <PlusCircle className="h-6 w-6" />
+                    <span className="sr-only">Create</span>
+                  </Button>
+                </Link>
+              </div>
+            </div> */}
           </CardHeader>
         </Card>
         <Conversations />
