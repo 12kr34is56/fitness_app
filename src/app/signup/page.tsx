@@ -1,9 +1,7 @@
-import UserInfoExtra from "@/app/_blocks/extra-user-info"
+import UserInfoExtra from "@/app/_blocks/extra-user-info";
 
-const page = async() => {
-  return (
-    <div><UserInfoExtra /></div>
-  )
-}
+const page = async () => {
+  return <UserInfoExtra />;
+};
 
-export default page
+export default page;
