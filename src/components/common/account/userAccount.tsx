@@ -23,11 +23,11 @@ function UserAccount({ userData }: { userData: User }) {
     <div className="w-full">
       <Table>
         <TableBody>
-          <TableRow>
-            <TableCell className="text-left w-full">
+          <TableRow className="w-full flex justify-between">
+            <TableCell className="text-left w-fit">
               <span className="font-medium">Trainer Name</span>
             </TableCell>
-            <TableCell className="inline-flex items-center justify-end gap-5 w-full">
+            <TableCell className="inline-flex items-center justify-end gap-5 w-fit">
               <span className="font-medium text-right">
                 {userData?.trainerName ? userData?.trainerName : "NA"}
               </span>
