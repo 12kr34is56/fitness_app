@@ -84,7 +84,7 @@ export default async function Profile() {
             )}
             {userData?.role === "TRAINER" && (
               <div className="">
-                <TrainerAccount userData={userData} />
+                <TrainerAccount  />
               </div>
             )}
             {userData?.role === "ADMIN" && (
