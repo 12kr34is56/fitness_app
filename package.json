@@ -7,11 +7,7 @@
     "build": "prisma generate && next build",
     "start": "next start",
     "lint": "next lint",
-<<<<<<< HEAD
     "db": "pnpm db:generate && pnpm db:migrate",
-=======
-    "db": "pnpm db:generate && pnpm db:migrate && pnpm db:studio",
->>>>>>> 8fccace1adc824bd7b7394c3ed8e419ec55db15c
     "db:generate": "prisma generate",
     "db:migrate": "prisma migrate dev",
     "db:studio": "prisma studio"
