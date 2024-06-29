@@ -21,6 +21,7 @@ import {
   Eye,
   Loader,
   MoreHorizontal,
+  Trash,
 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -55,8 +56,14 @@ import {
   AlertDialogContent,
   AlertDialogTrigger,
   AlertDialogFooter,
+  AlertDialogCancel,
+  AlertDialogAction,
 } from "@/components/ui/alert-dialog";
+
 import MembersDetailsForm from "./membersDetailsForm";
+import { RemoveMember } from "@/server/removeMeeting";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 export type Members = {
   id: string;
@@ -65,6 +72,90 @@ export type Members = {
   image: string;
   sex: "MALE" | "FEMALE" | "OTHER";
   role: "user" | "trainer";
+};
+
+const ActionsCell = ({ member }: { member: Members }) => {
+  const router = useRouter();
+
+  function DeleteUser(id: any) {
+    const handleDeleteUser = React.useCallback(async () => {
+      try {
+        const response = await RemoveMember(id);
+        if (response.success) {
+          toast.success("User deleted successfully");
+          console.log(response.success);
+          router.refresh()
+        } else {
+          toast.error("Error deleting user");
+          console.error(response.error);
+        }
+      } catch (error) {
+        console.error("Error deleting user:", error);
+      }
+    }, [id]);
+
+    return handleDeleteUser;
+  }
+
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button variant="ghost" className="h-8 w-8 p-0">
+          <span className="sr-only">Open menu</span>
+          <MoreHorizontal className="h-4 w-4" />
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end">
+        <DropdownMenuLabel>Actions</DropdownMenuLabel>
+        <DropdownMenuItem
+          className="w-full inline-flex items-center gap-2"
+          onClick={() => navigator.clipboard.writeText(member?.email)}
+        >
+          <Copy className="w-4 h-4" />
+          Copy email ID
+        </DropdownMenuItem>
+        <DropdownMenuSeparator />
+        <DropdownMenuSub>
+          <DropdownMenuSubTrigger>
+            <AlertDialog>
+              <AlertDialogTrigger className="w-full inline-flex items-end gap-2">
+                <Eye className="w-4 h-4" />
+                View Details
+              </AlertDialogTrigger>
+              <AlertDialogContent className="p-0 overflow-hidden">
+                <MembersDetailsForm
+                  AlertDialogFooter={AlertDialogFooter}
+                  data={member}
+                />
+              </AlertDialogContent>
+            </AlertDialog>
+          </DropdownMenuSubTrigger>
+        </DropdownMenuSub>
+        <DropdownMenuSeparator />
+        <DropdownMenuSub>
+          <DropdownMenuSubTrigger>
+            <AlertDialog>
+              <AlertDialogTrigger className="w-full inline-flex items-end gap-2 text-red-500">
+                <Trash className="w-4 h-4" />
+                User Delete
+              </AlertDialogTrigger>
+              <AlertDialogContent>
+                <h2 className="text-lg font-medium">Confirm Delete</h2>
+                <p>Are you sure you want to delete this user?</p>
+                <AlertDialogFooter>
+                  <AlertDialogCancel>Cancel</AlertDialogCancel>
+                  <AlertDialogAction onClick={DeleteUser(member?.id)}>
+                    Continue
+                  </AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
+          </DropdownMenuSubTrigger>
+        </DropdownMenuSub>
+        <DropdownMenuSeparator />
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
 };
 
 export const columns: ColumnDef<Members>[] = [
@@ -118,47 +209,7 @@ export const columns: ColumnDef<Members>[] = [
   {
     id: "actions",
     enableHiding: false,
-    cell: ({ row }) => {
-      const member = row.original;
-
-      return (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="h-8 w-8 p-0">
-              <span className="sr-only">Open menu</span>
-              <MoreHorizontal className="h-4 w-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <DropdownMenuItem
-              className="w-full inline-flex items-center gap-2"
-              onClick={() => navigator.clipboard.writeText(member?.email)}
-            >
-              <Copy className="w-4 h-4" />
-              Copy email ID
-            </DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuSub>
-              <DropdownMenuSubTrigger>
-                <AlertDialog>
-                  <AlertDialogTrigger className="w-full inline-flex items-end gap-2">
-                    <Eye className="w-4 h-4" />
-                    View Details
-                  </AlertDialogTrigger>
-                  <AlertDialogContent className="p-0 overflow-hidden">
-                    <MembersDetailsForm
-                      AlertDialogFooter={AlertDialogFooter}
-                      data={member}
-                    />
-                  </AlertDialogContent>
-                </AlertDialog>
-              </DropdownMenuSubTrigger>
-            </DropdownMenuSub>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      );
-    },
+    cell: ({ row }) => <ActionsCell member={row.original} />,
   },
 ];
 
