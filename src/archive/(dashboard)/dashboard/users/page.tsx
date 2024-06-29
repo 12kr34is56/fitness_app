@@ -11,7 +11,6 @@ const UserListPageStyles = {
 
 const UserListPage = async () => {
   const data = await db.user.findMany();
-  // console.log(data)
   return (
     <section>
       <Card className={UserListPageStyles.CARD}>

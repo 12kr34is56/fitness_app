@@ -25,14 +25,18 @@ model User {
   email          String          @unique
   emailVerified  DateTime?
   image          String?
+  age            Int?
   sex            SEX?
+  height         Float?
+  weight         Float?
+  fitnessGoals   String?
   accounts       Account[]
   sessions       Session[]
   role           ROLE            @default(USER)
   Authenticators Authenticator[]
-
-  trainersNames String?
-  studentsNames String?
+  trainerEmail  String?
+  trainerName String?
+  studentsEmail String[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

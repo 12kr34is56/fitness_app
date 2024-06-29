@@ -14,7 +14,6 @@ export default async function ScheduleMeeting() {
     },
   });
 
-  console.log(user?.role);
 
   if (user?.role !== "ADMIN" && user?.role !== "TRAINER") {
     return null;

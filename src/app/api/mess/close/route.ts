@@ -45,7 +45,6 @@ export async function DELETE(req: NextRequest) {
 
     return NextResponse.json({ message: "Conversation deleted successfully" }, { status: 200 });
   } catch (error) {
-    console.log("[CONVERSATION_DELETE]", error);
     return NextResponse.json({ error: "Internal error" }, { status: 500 });
   }
 }

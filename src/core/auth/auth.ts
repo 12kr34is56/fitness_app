@@ -12,7 +12,7 @@ export const authOptions = {
   trustHost:true,
   pages: {
     signIn: "/signin",
-    newUser: "/",
+    newUser: "/signup",
     error: "/error",
     signOut: "/signout",
   },

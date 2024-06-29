@@ -41,7 +41,6 @@ export const ConversationProvider = ({ children }: { children: ReactNode }) => {
   const [messagesPageNumber, setMessagesPageNumber] = useState<number>(0);
 
   useEffect(() => {
-    console.log("Selected Conversation Changed: ", selectedConversation);
     // Ensure selectedConversation is not null or undefined before fetching messages
     if (selectedConversation != null) {
       fetchMessages(selectedConversation, messagesPageNumber);
@@ -68,7 +67,6 @@ export const ConversationProvider = ({ children }: { children: ReactNode }) => {
   }, []);
 
   const fetchMessages = async (conversationId: string, page: number) => {
-    console.log("Fetching Messages for Conversation: ", conversationId, "Page: ", page);
     setIsMessagesFetched(false);
     try {
       const response: any = await db.conversation.findUnique({
@@ -88,7 +86,6 @@ export const ConversationProvider = ({ children }: { children: ReactNode }) => {
       });
 
       if (response) {
-        console.log("Fetched Messages: ", response.messages);
         setMessages(response.messages);
       } else {
         console.log("No messages found for conversation: ", conversationId);
@@ -96,7 +93,6 @@ export const ConversationProvider = ({ children }: { children: ReactNode }) => {
 
       setIsMessagesFetched(true);
     } catch (error) {
-      console.error("Error fetching messages:", error);
       toast.error("Error fetching messages: Please try again");
     } finally {
       setIsMessagesFetched(true);

@@ -28,7 +28,6 @@ const BreadCrumbs: React.FC = () => {
 
     return { label, href }
   })
-
   return (
     <Breadcrumb className="text-xs px-4">
       <BreadcrumbList className="flex items-center w-auto px-0">

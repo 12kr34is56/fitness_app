@@ -106,7 +106,6 @@ export default function CreateNewMessage() {
 
       if (data.success) {
         toast.success(data?.feedback);
-        console.log(data, "DataSuccess");
         setIsPending(false);
         form.reset();
         router.push("/messages");

@@ -11,13 +11,8 @@ import { User } from "@prisma/client";
 import { Edit } from "lucide-react";
 import {
   AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
   AlertDialogContent,
-  AlertDialogDescription,
   AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 
@@ -34,7 +29,7 @@ function UserAccount({ userData }: { userData: User }) {
             </TableCell>
             <TableCell className="inline-flex items-center justify-end gap-5 w-full">
               <span className="font-medium text-right">
-                {userData?.trainersNames ? userData?.trainersNames : "NA"}
+                {userData?.trainerName ? userData?.trainerName : "NA"}
               </span>
               <AlertDialog>
                 <AlertDialogTrigger>
