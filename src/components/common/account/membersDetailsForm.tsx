@@ -364,23 +364,21 @@ function MembersDetailsForm({
                   />
                 )}
 
-                {data?.role === "ADMIN" && (
-                  <div className="w-full grid grid-cols-3 gap-2 items-center justify-center">
-                    <Button
-                      disabled={isPending}
-                      type="submit"
-                      className="w-full col-span-2"
-                    >
-                      {isPending && (
-                        <Loader className="mr-2 h-4 w-4 animate-spin" />
-                      )}
-                      {isPending ? "Saving..." : "Save"}
-                    </Button>
-                    <AlertDialogCancel className="col-span-1">
-                      Close
-                    </AlertDialogCancel>
-                  </div>
-                )}
+                <div className="w-full grid grid-cols-3 gap-2 items-center justify-center">
+                  <Button
+                    disabled={isPending}
+                    type="submit"
+                    className="w-full col-span-2"
+                  >
+                    {isPending && (
+                      <Loader className="mr-2 h-4 w-4 animate-spin" />
+                    )}
+                    {isPending ? "Saving..." : "Save"}
+                  </Button>
+                  <AlertDialogCancel className="col-span-1">
+                    Close
+                  </AlertDialogCancel>
+                </div>
               </form>
             </Form>
           </ScrollArea>
