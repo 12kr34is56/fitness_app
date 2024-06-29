@@ -34,6 +34,5 @@ export const getconversation = async({id}:{id:string}) => {
     return otherParticipant?.email;
   } catch (error) {
     console.error(error);
-    console.log("error")
   }
 }

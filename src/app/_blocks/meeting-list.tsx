@@ -40,7 +40,6 @@ export default function MeetingList({
       toast.error(response.error);
     }
   };
-  console.log();
   return (
     <Card className="w-full">
       <CardHeader>
