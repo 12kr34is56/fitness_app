@@ -88,7 +88,7 @@ export const columns: ColumnDef<Students>[] = [
     id: "actions",
     enableHiding: false,
     cell: ({ row }) => {
-      const user = row.original;
+      const user = row?.original;
 
       return (
         <DropdownMenu>
@@ -102,7 +102,7 @@ export const columns: ColumnDef<Students>[] = [
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuItem
               className="w-full inline-flex items-center gap-2"
-              onClick={() => navigator.clipboard.writeText(user?.email)}
+              onClick={() => navigator?.clipboard?.writeText(user?.email)}
             >
               Copy Email ID
             </DropdownMenuItem>
@@ -186,7 +186,7 @@ export function TrainerAccount() {
           onChange={(event) =>
             table
               .getColumn("name" && "email")
-              ?.setFilterValue(event.target.value)
+              ?.setFilterValue(event?.target?.value)
           }
           className="max-w-sm"
         />
@@ -199,15 +199,15 @@ export function TrainerAccount() {
           <DropdownMenuContent align="end">
             {table
               .getAllColumns()
-              .filter((column) => column.getCanHide())
+              .filter((column) => column?.getCanHide())
               .map((column) => {
                 return (
                   <DropdownMenuCheckboxItem
-                    key={column.id}
+                    key={column?.id}
                     className="capitalize"
                     checked={column.getIsVisible()}
                     onCheckedChange={(value) =>
-                      column.toggleVisibility(!!value)
+                      column?.toggleVisibility(!!value)
                     }
                   >
                     {column?.id}
@@ -221,15 +221,15 @@ export function TrainerAccount() {
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
-              <TableRow key={headerGroup.id}>
-                {headerGroup.headers.map((header) => {
+              <TableRow key={headerGroup?.id}>
+                {headerGroup?.headers?.map((header) => {
                   return (
-                    <TableHead key={header.id}>
-                      {header.isPlaceholder
+                    <TableHead key={header?.id}>
+                      {header?.isPlaceholder
                         ? null
                         : flexRender(
-                            header.column.columnDef.header,
-                            header.getContext()
+                            header?.column?.columnDef?.header,
+                            header?.getContext()
                           )}
                     </TableHead>
                   );
@@ -239,16 +239,16 @@ export function TrainerAccount() {
           </TableHeader>
           <TableBody>
             {table.getRowModel().rows?.length ? (
-              table.getRowModel().rows.map((row) => (
+              table.getRowModel().rows?.map((row) => (
                 <TableRow
-                  key={row.id}
-                  data-state={row.getIsSelected() && "selected"}
+                  key={row?.id}
+                  data-state={row?.getIsSelected() && "selected"}
                 >
                   {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id}>
+                    <TableCell key={cell?.id}>
                       {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext()
+                        cell?.column?.columnDef?.cell,
+                        cell?.getContext()
                       )}
                     </TableCell>
                   ))}
@@ -257,7 +257,7 @@ export function TrainerAccount() {
             ) : (
               <TableRow>
                 <TableCell
-                  colSpan={columns.length}
+                  colSpan={columns?.length}
                   className="h-24 text-center"
                 >
                   No results.
@@ -275,16 +275,16 @@ export function TrainerAccount() {
           <Button
             variant="outline"
             size="sm"
-            onClick={() => table.previousPage()}
-            disabled={!table.getCanPreviousPage()}
+            onClick={() => table?.previousPage()}
+            disabled={!table?.getCanPreviousPage()}
           >
             Previous
           </Button>
           <Button
             variant="outline"
             size="sm"
-            onClick={() => table.nextPage()}
-            disabled={!table.getCanNextPage()}
+            onClick={() => table?.nextPage()}
+            disabled={!table?.getCanNextPage()}
           >
             Next
           </Button>

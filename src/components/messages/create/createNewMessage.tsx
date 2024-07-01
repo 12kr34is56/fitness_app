@@ -58,7 +58,7 @@ export default function CreateNewMessage() {
       const data = await response.json();
       // Filter the trainers based on role
       const trainerData = data?.filter(
-        (user: { role: string }) => user.role === "TRAINER"
+        (user: { role: string }) => user?.role === "TRAINER"
       );
       setTrainers(trainerData);
     } catch (error) {
@@ -98,14 +98,14 @@ export default function CreateNewMessage() {
       const data: { error?: string; success?: string; feedback?: string } =
         await response.json();
 
-      if (data.error) {
-        toast.error(data.error);
+      if (data?.error) {
+        toast.error(data?.error);
         setIsPending(false);
         form.reset();
         return;
       }
 
-      if (data.success) {
+      if (data?.success) {
         toast.success(data?.feedback);
         setIsPending(false);
         form.reset();
@@ -113,7 +113,7 @@ export default function CreateNewMessage() {
         return;
       }
     } catch (error: any) {
-      toast.error(error.message);
+      toast.error(error?.message);
       setIsPending(false);
       form.reset();
     } finally {
@@ -141,20 +141,20 @@ export default function CreateNewMessage() {
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
                     <Button variant="outline" size={"sm"} className="ml-2">
-                      {field.value || "Select"}
+                      {field?.value || "Select"}
                     </Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent className="w-96 p-0">
                     <DropdownMenuRadioGroup
                       value={field.value}
                       onValueChange={(value) => {
-                        field.onChange(value);
+                        field?.onChange(value);
                       }}
                     >
-                      {trainers.map((trainer: any, index: number) => (
+                      {trainers?.map((trainer: any, index: number) => (
                         <DropdownMenuRadioItem
-                          key={trainer.id}
-                          value={trainer.email}
+                          key={trainer?.id}
+                          value={trainer?.email}
                           className="flex items-center justify-start gap-2 p-2"
                         >
                           <span>{index + 1}.</span>
@@ -165,7 +165,7 @@ export default function CreateNewMessage() {
                             height={32}
                             className="rounded-full"
                           />
-                          <p>{trainer.name}</p>
+                          <p>{trainer?.name}</p>
                         </DropdownMenuRadioItem>
                       ))}
                     </DropdownMenuRadioGroup>
@@ -205,7 +205,6 @@ export default function CreateNewMessage() {
                 />
               </FormControl>
               <FormDescription>
-                You can <span>@mention</span> other users.
               </FormDescription>
               <FormMessage />
             </FormItem>

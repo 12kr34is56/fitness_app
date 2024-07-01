@@ -13,7 +13,7 @@ const MessagesPage = async ({ params }: { params: { id: string } }) => {
     return redirect("/auth");
   }
 
-  const loggedInUserEmail: string = session.user.email;
+  const loggedInUserEmail: string = session?.user?.email;
   const loggedInUser = await db.user.findUnique({ where: { email: loggedInUserEmail } });
 
   if (!loggedInUser) {
@@ -31,7 +31,7 @@ const MessagesPage = async ({ params }: { params: { id: string } }) => {
     return <Chat id={id} />;
   }
 
-  const isAdmin: boolean = loggedInUser.role === "ADMIN";
+  const isAdmin: boolean = loggedInUser?.role === "ADMIN";
   let otherUserEmail: string | undefined;
 
   if (isAdmin && id !== loggedInUserEmail) {
@@ -42,7 +42,7 @@ const MessagesPage = async ({ params }: { params: { id: string } }) => {
   }
 
   try {
-    const otherUser = await db.user.findUnique({
+    const otherUser = await db?.user?.findUnique({
       where: { email: otherUserEmail }
     });
 
@@ -50,19 +50,19 @@ const MessagesPage = async ({ params }: { params: { id: string } }) => {
       throw new Error(`User with email ${otherUserEmail} not found.`);
     }
 
-    const convo = await db.conversation.findFirst({
+    const convo = await db?.conversation.findFirst({
       where: {
         OR: [
           {
             AND: [
-              { participant1Id: loggedInUser.id },
-              { participant2Id: otherUser.id }
+              { participant1Id: loggedInUser?.id },
+              { participant2Id: otherUser?.id }
             ]
           },
           {
             AND: [
-              { participant1Id: otherUser.id },
-              { participant2Id: loggedInUser.id }
+              { participant1Id: otherUser?.id },
+              { participant2Id: loggedInUser?.id }
             ]
           }
         ]
@@ -73,7 +73,7 @@ const MessagesPage = async ({ params }: { params: { id: string } }) => {
       toast.error("You have to create a conversation first");
       return redirect("/messages/create");
     } else {
-      return <Chat id={convo.id} />;
+      return <Chat id={convo?.id} />;
     }
   } catch (error) {
     console.error("Error fetching conversation:", error);

@@ -31,7 +31,7 @@ const removeDuplicateChat = (messages: Messages[]) => {
 };
 const MessageListPage = async () => {
   const session = await auth();
-  const user = await db.user.findUnique({
+  const user = await db?.user?.findUnique({
     where: {
       email: session?.user?.email!,
     },

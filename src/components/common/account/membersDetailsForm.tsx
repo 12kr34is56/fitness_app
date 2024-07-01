@@ -123,9 +123,9 @@ function MembersDetailsForm({
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setIsPending(true);
     try {
-      const res = await updateUser(data.id, {
-        role: values.role,
-        trainerEmail: values.trainerName,
+      const res = await updateUser(data?.id, {
+        role: values?.role,
+        trainerEmail: values?.trainerName,
       });
       setIsPending(false);
       toast.success("User Updated Successfully");
@@ -175,7 +175,7 @@ function MembersDetailsForm({
                           disabled
                           placeholder="Enter Name"
                           {...field}
-                          value={field.value || data?.name}
+                          value={field?.value || data?.name}
                         />
                       </FormControl>
                       <FormMessage />
@@ -192,7 +192,7 @@ function MembersDetailsForm({
                         <Input
                           placeholder="Enter Email"
                           {...field}
-                          value={field.value || data?.email}
+                          value={field?.value || data?.email}
                           disabled
                         />
                       </FormControl>
@@ -211,7 +211,7 @@ function MembersDetailsForm({
                           disabled
                           placeholder="Enter gender"
                           {...field}
-                          value={field.value || data?.sex}
+                          value={field?.value || data?.sex}
                         />
                       </FormControl>
                       <FormMessage />
@@ -229,7 +229,7 @@ function MembersDetailsForm({
                           disabled
                           placeholder="Enter Age"
                           {...field}
-                          value={field.value || data?.age}
+                          value={field?.value || data?.age}
                         />
                       </FormControl>
                       <FormMessage />
@@ -247,7 +247,7 @@ function MembersDetailsForm({
                           disabled
                           placeholder="Enter Weight"
                           {...field}
-                          value={field.value || data?.weight}
+                          value={field?.value || data?.weight}
                         />
                       </FormControl>
                       <FormMessage />
@@ -265,7 +265,7 @@ function MembersDetailsForm({
                           disabled
                           placeholder="Enter Height"
                           {...field}
-                          value={field.value || data?.height}
+                          value={field?.value || data?.height}
                         />
                       </FormControl>
                       <FormMessage />
@@ -281,14 +281,14 @@ function MembersDetailsForm({
                       <FormLabel className="w-full">Role</FormLabel>
                       <FormControl className="w-full">
                         <Select
-                          value={field.value || data?.role}
+                          value={field?.value || data?.role}
                           onValueChange={(value) => field.onChange(value)}
                         >
                           <SelectTrigger>
                             <SelectValue placeholder="Select Role" />
                           </SelectTrigger>
                           <SelectContent>
-                            {roles.map((role, index) => (
+                            {roles?.map((role, index) => (
                               <SelectItem key={index} value={role}>
                                 {role}
                               </SelectItem>
@@ -313,7 +313,7 @@ function MembersDetailsForm({
                         <FormControl className="w-full">
                           <Select
                             value={
-                              field.value ||
+                              field?.value ||
                               data?.trainerEmail ||
                               "No trainer selected"
                             }
@@ -327,12 +327,12 @@ function MembersDetailsForm({
                                 No trainer selected
                               </SelectItem>
                               {trainers &&
-                                trainers.map((trainer) => (
+                                trainers?.map((trainer) => (
                                   <SelectItem
-                                    key={trainer.email}
-                                    value={trainer.email}
+                                    key={trainer?.email}
+                                    value={trainer?.email}
                                   >
-                                    {trainer.name} ({trainer.email})
+                                    {trainer?.name} ({trainer?.email})
                                   </SelectItem>
                                 ))}
                             </SelectContent>
@@ -357,9 +357,9 @@ function MembersDetailsForm({
                               List of students
                             </DropdownMenuTrigger>
                             <DropdownMenuContent>
-                              {data.studentsData &&
-                              data.studentsData.length > 0 ? (
-                                data.studentsData.map(
+                              {data?.studentsData &&
+                              data?.studentsData?.length > 0 ? (
+                                data?.studentsData?.map(
                                   (
                                     { name, email, image }: any,
                                     index: Key | null | undefined
@@ -423,7 +423,7 @@ function MembersDetailsForm({
                             disabled
                             placeholder="Enter Goal..."
                             {...field}
-                            value={field.value || data?.fitnessGoals}
+                            value={field?.value || data?.fitnessGoals}
                           />
                         </FormControl>
                         <FormMessage />
