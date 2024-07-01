@@ -29,6 +29,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { getSession } from "next-auth/react";
 import { Session } from "next-auth";
+import Image from "next/image";
 
 const FormSchema = z.object({
   subject: z.string(),
@@ -139,21 +140,32 @@ export default function CreateNewMessage() {
               <FormControl>
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
-                    <Button variant="outline">{field.value || "Select"}</Button>
+                    <Button variant="outline" size={"sm"} className="ml-2">
+                      {field.value || "Select"}
+                    </Button>
                   </DropdownMenuTrigger>
-                  <DropdownMenuContent className="w-56">
+                  <DropdownMenuContent className="w-96 p-0">
                     <DropdownMenuRadioGroup
                       value={field.value}
                       onValueChange={(value) => {
                         field.onChange(value);
                       }}
                     >
-                      {trainers.map((trainer: any) => (
+                      {trainers.map((trainer: any, index: number) => (
                         <DropdownMenuRadioItem
                           key={trainer.id}
                           value={trainer.email}
+                          className="flex items-center justify-start gap-2 p-2"
                         >
-                          {trainer.name}
+                          <span>{index + 1}.</span>
+                          <Image
+                            src={trainer?.image}
+                            alt={trainer?.name}
+                            width={32}
+                            height={32}
+                            className="rounded-full"
+                          />
+                          <p>{trainer.name}</p>
                         </DropdownMenuRadioItem>
                       ))}
                     </DropdownMenuRadioGroup>

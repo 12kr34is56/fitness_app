@@ -26,9 +26,9 @@ const Layout = async ({ children }: { children: React.ReactNode }) => {
           email={userData?.email || ""}
         />
       </Suspense>
-      <Suspense fallback={null}>
+      {/* <Suspense fallback={null}>
         <BreadCrumbs />
-      </Suspense>
+      </Suspense> */}
       <main className="flex-1 overflow-y-auto">{children}</main>
       <Suspense fallback={null}>
         <NavigationBar userRole={userData?.role || "USER"} />
