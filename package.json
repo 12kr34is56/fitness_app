@@ -3,9 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "prisma" : "prisma",
     "dev": "next dev",
     "build": "pnpm prisma generate && next build",
-    "start": "pnpm prisma generate && next start",
+    "start": "next start",
     "lint": "next lint",
     "db": "pnpm db:generate && pnpm db:migrate",
     "db:generate": "prisma generate",
