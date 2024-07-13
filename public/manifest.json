@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 {
     "id": "101",
     "name": "My fitness App with Mobile app",
@@ -7,4 +8,15 @@
     "start_url": "/",
     "display": "standalone",
     "orientation": "portrait"
+=======
+{
+    "id": "101",
+    "name": "My fitness App with Mobile app",
+    "short_name": "Fitness app",
+    "theme_color": "#FFFFFF",
+    "background_color": "#FFFFFF",
+    "start_url": "/",
+    "display": "standalone",
+    "orientation": "portrait"
+>>>>>>> 729a1d889168b9db66c9656fe048b50c36e9498e
 }
