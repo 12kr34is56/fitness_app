@@ -13,6 +13,7 @@
     "db:studio": "prisma studio"
   },
   "dependencies": {
+    "@ducanh2912/next-pwa": "^10.2.7",
     "@auth/core": "^0.27.0",
     "@auth/prisma-adapter": "^2.1.0",
     "@hookform/resolvers": "^3.4.2",

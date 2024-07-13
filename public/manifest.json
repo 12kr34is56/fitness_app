@@ -1,0 +1,10 @@
+{
+    "id": "101",
+    "name": "My fitness App with Mobile app",
+    "short_name": "Fitness app",
+    "theme_color": "#FFFFFF",
+    "background_color": "#FFFFFF",
+    "start_url": "/",
+    "display": "standalone",
+    "orientation": "portrait"
+}
