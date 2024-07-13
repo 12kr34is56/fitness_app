@@ -1,0 +1,6 @@
+services:
+  - type: web
+  name: 'fitness-app'
+  env: node
+  buildCommand: 'pnpm install && pnpm prisma generate && pnpm build'
+  startCommand: 'pnpm start'
